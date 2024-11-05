@@ -1,5 +1,5 @@
 const global = {
-    currentPage: window.location.pathname,
+    currentPage: window.location.pathname.split('/').pop(),
 };
 
 async function displayPopularMovies() {
