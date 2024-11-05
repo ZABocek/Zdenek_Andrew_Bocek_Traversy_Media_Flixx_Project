@@ -14,7 +14,7 @@ async function displayPopularMovies() {
               class="card-img-top"
               alt="${movie.title}"
             />` : `<img
-              src="/images/no-image.jpg"
+              src="../images/no-image.jpg"
               class="card-img-top"
               alt="Movie Title"
             />`}
