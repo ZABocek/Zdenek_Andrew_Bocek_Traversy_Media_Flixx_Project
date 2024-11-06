@@ -3,32 +3,38 @@ const global = {
 };
 
 async function displayPopularMovies() {
-    const { results } = await fetchAPIData('movie/popular');
-    results.forEach(movie => {
+    const data = await fetchAPIData('movie/popular');
+    console.log(data); // For debugging
+    const { results } = data;
+    results.forEach((movie) => {
         const div = document.createElement('div');
         div.classList.add('card');
         div.innerHTML = `
-          <a href="movie-details.html?id=${movie.id}">
-            ${movie.poster_path ? `<img
-              src="https://image.tmdb.org/t/p/w500${movie.poster_path}"
-              class="card-img-top"
-              alt="${movie.title}"
-            />` : `<img
-              src="images/no-image.jpg"
-              class="card-img-top"
-              alt="Movie Title"
-            />`}
-          </a>
-          <div class="card-body">
-            <h5 class="card-title">${movie.title}</h5>
-            <p class="card-text">
-              <small class="text-muted">Release: ${movie.release_date}</small>
-            </p>
-          </div>`;
+            <a href="movie-details.html?id=${movie.id}">
+                ${
+                    movie.poster_path
+                        ? `<img
+                    src="https://image.tmdb.org/t/p/w500${movie.poster_path}"
+                    class="card-img-top"
+                    alt="${movie.title}"
+                />`
+                        : `<img
+                    src="images/no-image.jpg"
+                    class="card-img-top"
+                    alt="Movie Title"
+                />`
+                }
+            </a>
+            <div class="card-body">
+                <h5 class="card-title">${movie.title}</h5>
+                <p class="card-text">
+                    <small class="text-muted">Release: ${movie.release_date}</small>
+                </p>
+            </div>`;
         document.querySelector('#popular-movies').appendChild(div);
     });
 }
-// Highlight active link
+
 function highlightActiveLink() {
     const links = document.querySelectorAll('.nav-link');
     links.forEach((link) => {
@@ -43,11 +49,17 @@ async function fetchAPIData(endpoint) {
     const API_KEY = 'f1d3c95b2c0cbdf21b1e06a9b83617a9';
     const API_URL = 'https://api.themoviedb.org/3/';
 
-    const response = await fetch(`${API_URL}${endpoint}?api_key=${API_KEY}&language=en-US`);
-
-    const data = await response.json();
-
-    return data;
+    try {
+        const response = await fetch(`${API_URL}${endpoint}?api_key=${API_KEY}&language=en-US`);
+        if (!response.ok) {
+            throw new Error(`API error: ${response.status} ${response.statusText}`);
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error(error);
+        return { results: [] };
+    }
 }
 
 // Init App
