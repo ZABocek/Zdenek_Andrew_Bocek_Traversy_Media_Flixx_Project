@@ -407,7 +407,7 @@ function init() {
             displayShowDetails();
             break;
         case 'search.html':
-            console.log('Search');
+            search();
             break;
     }
     highlightActiveLink();
